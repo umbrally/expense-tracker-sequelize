@@ -9,9 +9,9 @@ const db = require('../models')
 const User = db.User
 const Record = db.Record
 
-
+// 登入頁面
 router.get('/', (req, res) => {
-  res.send('列出所有支出')
+  res.render('login')
 })
 
 // 登入頁面
@@ -20,15 +20,20 @@ router.get('/login', (req, res) => {
 })
 
 // 登入檢查
-router.post('/login', (req, res) => {
-  res.send('login')
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+    failureFlash: true,
+    successFlash: '您已成功登入!',
+    badRequestMessage: '請輸入email 及 密碼'
+  })(req, res, next)
 })
 
 // 註冊頁面
 router.get('/register', (req, res) => {
   res.render('register')
 })
-
 
 // 註冊檢查
 router.post('/register', registerValidator, (req, res) => {
