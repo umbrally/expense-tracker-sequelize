@@ -1,5 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
+
+const db = require('../models')
+const User = db.User
+const Record = db.Record
+
 
 router.get('/', (req, res) => {
   res.send('列出所有支出')
@@ -24,6 +30,7 @@ router.get('/register', (req, res) => {
 // 註冊檢查
 router.post('/register', (req, res) => {
   res.send('register')
+
 })
 
 
