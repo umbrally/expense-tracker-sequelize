@@ -16,6 +16,9 @@ app.get('/', (req, res) => {
   res.send('Hello World')
 })
 
+
+app.use('/users', require('./routes/user.js'))
+
 app.listen(port, () => {
   console.log(`App is running on port ${port}!`)
 })
