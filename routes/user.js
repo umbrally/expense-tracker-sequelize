@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
+const { validationResult } = require('express-validator')
+const { registerValidator } = require('../lib/validator.js')
+const bcrypt = require('bcryptjs')
 
 const db = require('../models')
 const User = db.User
@@ -28,9 +31,41 @@ router.get('/register', (req, res) => {
 
 
 // 註冊檢查
-router.post('/register', (req, res) => {
-  res.send('register')
+router.post('/register', registerValidator, (req, res) => {
+  const { name, email, password, password2 } = req.body
+  const errors = validationResult(req)
+  let errorsMessages = []
+  if (!errors.isEmpty()) {
 
+    errors.array().forEach(error => {
+      errorsMessages.push({ message: error.msg })
+    })
+    return res.render('register', { name, email, password, password2, errors: errorsMessages })
+  }
+
+  else {
+    // const { name, email, password, password2 } = req.body
+    User.findOne({ where: { email: email } }).then(user => {
+      if (user) {
+        console.log('this email already exists')
+        errorsMessages.push({ message: '這個 Email 已經註冊過了' })
+        res.render('register', { name, email, password, password2, errors: errorsMessages })
+      }
+      else {
+        const newUser = new User({ name, email, password })
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err
+            newUser.password = hash
+            newUser
+              .save()
+              .then(user => res.redirect('/'))
+              .catch(err => console.log(err))
+          })
+        })
+      }
+    })
+  }
 })
 
 
