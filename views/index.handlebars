@@ -1,0 +1,107 @@
+<div class="container">
+
+  <form action="/records" method="GET" class="filter">
+    <div class="row justify-content-center">
+      <div class="form-group col-md-3">
+        <label for="selectMonth">月份</label>
+        <select id="selectMonth" class="form-control" name="month">
+          {{!-- 要自動帶入最新的月份 --}}
+          {{#if month}}
+          <option selected hidden> {{month}} </option>
+          {{/if}}
+          <option value="">全部</option>
+          {{#each months}}
+          <option>{{this}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-group col-md-3">
+        <label for="selectCategory">支出類別</label>
+        <select id="selectCategory" class="form-control" name="category">
+          <option value="" {{{setSelected category ''}}}>全部</option>
+          <option {{{setSelected category '家居物業'}}}>家居物業</option>
+          <option {{{setSelected category '交通出行'}}}>交通出行</option>
+          <option {{{setSelected category '休閒娛樂'}}}>休閒娛樂</option>
+          <option {{{setSelected category '餐飲食品'}}}>餐飲食品</option>
+          <option {{{setSelected category '其他'}}}>其他</option>
+        </select>
+      </div>
+      <div class="submit form-group align-self-end">
+        <button type="submit" class="btn btn-light">確認</button>
+      </div>
+    </div>
+  </form>
+  <div class="row total-amount pl-3 mb-4">
+    <h4 class="text-center text-info">總金額: <span class="text-danger ml-3">{{totalAmount}}</span> </h2>
+  </div>
+  {{> messages}}
+  <div class="row justify-content-center mb-3 mt-1">
+    <div class="col-md-8 table-responsive table-content mt-2">
+      <table class="table table-striped bg-secondary">
+        <thead>
+          <tr class="bg-primary text-white" style="font-size: 20px">
+            <th scope="col">支出類別</th>
+            <th scope="col">支出名稱</th>
+            <th scope="col">日期</th>
+            <th scope="col">金額</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each records}}
+          <tr>
+            <td>{{{categoryIcon this.category}}}</td>
+            <td>{{this.name}}</td>
+            <td>{{{dateFormat this.date}}}</td>
+            <td>{{this.amount}}</td>
+            <td>
+              <form action="/records/{{this.id}}/edit" method="GET">
+                <button class="submit btn btn-outline-success">編輯</button>
+              </form>
+            </td>
+            <td>
+              <form action="/records/{{this.id}}/copy" method="GET">
+                <button class="submit btn btn-outline-warning">複製</button>
+              </form>
+            </td>
+            <td>
+              <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                data-target="#delete-button-{{this.id}}">刪除</button>
+            </td>
+            <!-- Modal for delete confirmation-->
+            <div class="modal fade" id="delete-button-{{this.id}}" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">要刪除 {{{dateFormat this.date}}} {{this.name}}?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    確定要刪除嗎?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <form action="/records/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+                      <button type="submit" class=" btn btn-danger btn-sm">Delete</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <form action="/records/new" method="GET" class="col-md-12 text-center">
+        <button type="submit" class="btn btn-success">新增支出</button>
+      </form>
+    </div>
+  </div>
+
+</div>

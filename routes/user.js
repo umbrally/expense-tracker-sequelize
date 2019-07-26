@@ -76,6 +76,9 @@ router.post('/register', registerValidator, (req, res) => {
 
 // 登出
 router.get('/logout', (req, res) => {
+  req.logout()
+
+  req.flash('success', '您已經成功登出')
   res.redirect('/users/login')
 })
 

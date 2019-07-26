@@ -3,7 +3,6 @@ const app = express()
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
-const dotEnv = require('dotenv')
 const passport = require('passport')
 const session = require('express-session')
 const flash = require('connect-flash')
@@ -17,6 +16,7 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static('public'))
 app.use(methodOverride('_method'))
 app.use(flash())
 app.use(session({
@@ -38,13 +38,10 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get('/', (req, res) => {
-  res.send('Hello World')
-})
-
-
+app.use('/', require('./routes/home.js'))
+app.use('/records', require('./routes/record.js'))
 app.use('/users', require('./routes/user.js'))
-app.use('/auth', require('./routes/auths.js'))
+app.use('/auth', require('./routes/auths'))
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}!`)
