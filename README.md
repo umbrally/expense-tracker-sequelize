@@ -19,8 +19,8 @@ These instructions will get you a copy of the project up and running on your loc
 $ nvm install 10.16.0
 ```
 2. Download MySQL and workbench from official website and install 
-[MAC](https://dev.mysql.com/downloads/mysql)
-[Windows](https://dev.mysql.com/downloads/windows/installer/)
+* [MAC](https://dev.mysql.com/downloads/mysql)
+* [Windows](https://dev.mysql.com/downloads/windows/installer/)
 
 
 ### Installing
