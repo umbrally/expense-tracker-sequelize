@@ -3,6 +3,8 @@
 Expense-tracker
 
 # Snapshot
+![image](https://github.com/umbrally/expense-tracker-sequelize/blob/master/snapshot.PNG)
+
 
 ## Getting Started
 
@@ -16,13 +18,16 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 $ nvm install 10.16.0
 ```
-2. MongoDB  
+2. Download MySQL and workbench from official website and install 
+[MAC](https://dev.mysql.com/downloads/mysql)
+[Windows](https://dev.mysql.com/downloads/windows/installer/)
+
 
 ### Installing
 
 1. Download this project 
 ```
-$ git clone https://github.com/umbrally/expense-tracker.git
+$ git clone https://github.com/umbrally/expense-tracker-sequelize.git
 ```
 
 2. Install packages used in this project
@@ -30,22 +35,31 @@ $ git clone https://github.com/umbrally/expense-tracker.git
 $ npm install
 ```
 
-3. Import seed data
-
+3. Create database in MySQL
+* Open MySQL workbench.
+* Input below code in query tab and execute.
 ```
-$ npm run seeder
+drop database if exists expense_tracker;
+create database expense_tracker;
+use expense_tracker;
 ```
 
-4. Create facebook login OAuth
+4. Create table and models by executing db:migrate
+* Input below code in terminal
+```
+$ $ npx sequelize db:migrate
+```
+
+5. Create facebook login OAuth
 [Facebook for Developers](https://developers.facebook.com/)
 Create an new app and using facebook login, and then get applicaiton ID and application Secret. 
 
-5. Set .env and use it
+6. Set .env and use it
 * Step 1. Create an .env file in root.  
 
 * Step 2. Write env data as following. 
 ```
-FACEBOOK_ID=//your fackbook application ID from '4. Create facebook login OAuth' setting
+FACEBOOK_ID=//your fackbook application ID from '5. Create facebook login OAuth' setting
 FACEBOOK_SECRET=//your fackbook application Secret from '4. Create facebook login OAuth' setting
 FACEBOOK_CALLBACK=http://localhost:3000/auth/facebook/callback 
 ```
